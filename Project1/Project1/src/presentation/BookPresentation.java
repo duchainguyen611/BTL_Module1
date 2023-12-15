@@ -46,10 +46,10 @@ public class BookPresentation {
                     bookBussinessImp.lookForBook(scanner, bookList);
                     break;
                 case 5:
-                    bookBussinessImp.output();
+                    bookBussinessImp.displayData();
                     break;
                 case 6:
-                    bookBussinessImp.displayData();
+                    bookBussinessImp.output();
                     break;
                 case 7:
                     MainPresentation.mainMenu();

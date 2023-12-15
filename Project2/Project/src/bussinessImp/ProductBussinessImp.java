@@ -131,7 +131,7 @@ public class ProductBussinessImp implements IProduct {
         System.out.println(Method.makeColor("Nhập trạng thái sản phẩm (chỉ nhận true/false khi nhập):",ConsoleColors.WHITE_BOLD_BRIGHT));
         do {
             String statusString = Method.lenghthString(0, 50, scanner);
-            if (statusString.equals("true") || statusString.equals("false")) {
+            if (statusString.equalsIgnoreCase("true") || statusString.equalsIgnoreCase("false")) {
                 return Boolean.parseBoolean(statusString);
             } else {
                 System.err.println("⚠ Warning: Chỉ nhận giá trị true | false! Mời nhập lại!");
@@ -146,14 +146,22 @@ public class ProductBussinessImp implements IProduct {
         System.out.println(Method.makeColor("Nhập mã danh mục:",ConsoleColors.WHITE_BOLD_BRIGHT));
         do {
             boolean isExit = false;
+            boolean isCheck = true;
             int id = Method.validateInteger(scanner);
             for (int i = 0; i < categoryList.size(); i++) {
                 if (id == categoryList.get(i).getId()) {
-                    return id;
+                    if (categoryList.get(i).isStatus()){
+                        return id;
+                    }else {
+                        isCheck = false;
+                        break;
+                    }
                 }
             }
-            if (!isExit) {
-                System.err.println("⚠ Warning: Phải nhập mã danh mục đã có!");
+            if (!isCheck){
+                System.err.println("⚠ Warning: Mã danh mục đang không hoạt động! Mời nhập mã khác!");
+            }else if (!isExit) {
+                System.err.println("⚠ Warning: ⚠ Warning: Phải nhập mã danh mục đã có!!");
             }
         } while (true);
     }

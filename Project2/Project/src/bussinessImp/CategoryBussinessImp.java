@@ -87,7 +87,7 @@ public class CategoryBussinessImp implements ICategory {
         System.out.println(Method.makeColor("Nhâp trạng thái danh mục (chỉ nhận true/false khi nhập):",ConsoleColors.WHITE_BOLD_BRIGHT));
         do {
             String status = Method.lenghthString(0, 50, scanner);
-            if (status.equals("true") || status.equals("false")) {
+            if (status.equalsIgnoreCase("true") || status.equalsIgnoreCase("false")) {
                 return Boolean.parseBoolean(status);
             } else {
                 System.err.println("⚠ Warning: Trạng thái danh mục chỉ nhận true/false khi nhập! Mời nhập lại!");

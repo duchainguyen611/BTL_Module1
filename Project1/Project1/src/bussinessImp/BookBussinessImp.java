@@ -46,26 +46,12 @@ public class BookBussinessImp implements IEntity {
 
     @Override
     public void output() {
-        List<Book> bookList = BookPresentation.bookList;
-        if (bookList.isEmpty() || CategoryPresentation.categoryList.isEmpty()) {
-            System.err.println("⚠ Warning: Không có thông tin sách hoặc thể loại sách! Hãy kiểm tra lại!");
+        if (BookPresentation.bookList.isEmpty()) {
+            System.err.println("⚠ Warning: Không có thông tin sách! Ấn 1 để thêm thông tin sách!");
         } else {
-            System.out.println(Method.makeColor("Hiển thị danh sách sách theo nhóm thể loại:", ConsoleColors.WHITE_BOLD_BRIGHT));
-            for (int i = 0; i < bookList.size(); i++) {
-                boolean processed = false;
-                for (int j = 0; j < i; j++) {
-                    if (bookList.get(i).getCategoryId() == bookList.get(j).getCategoryId()) {
-                        processed = true;
-                        break;
-                    }
-                }
-
-                if (!processed) {
-                    System.out.printf(Method.makeColor("❤️ Thể loại %s:\n", ConsoleColors.BLUE_BOLD_BRIGHT), getNameCategory(bookList.get(i).getCategoryId(), CategoryPresentation.categoryList));
-//                    System.out.printf("Thể loại %s:\n", getNameCategory(bookList.get(i).getCategoryId(), CategoryPresentation.categoryList));
-                    bookSameCategory(bookList.get(i).getCategoryId(), bookList);
-                }
-            }
+            System.out.println(Method.makeColor("Thông tin tất cả các sách:", ConsoleColors.WHITE_BOLD_BRIGHT));
+//            BookPresentation.bookList.forEach(System.out::println);
+            drawTable(BookPresentation.bookList);
         }
     }
 
@@ -89,12 +75,26 @@ public class BookBussinessImp implements IEntity {
     }
 
     public void displayData() {
-        if (BookPresentation.bookList.isEmpty()) {
-            System.err.println("⚠ Warning: Không có thông tin sách! Ấn 1 để thêm thông tin sách!");
+        List<Book> bookList = BookPresentation.bookList;
+        if (bookList.isEmpty() || CategoryPresentation.categoryList.isEmpty()) {
+            System.err.println("⚠ Warning: Không có thông tin sách hoặc thể loại sách! Hãy kiểm tra lại!");
         } else {
-            System.out.println(Method.makeColor("Thông tin tất cả các sách:", ConsoleColors.WHITE_BOLD_BRIGHT));
-//            BookPresentation.bookList.forEach(System.out::println);
-            drawTable(BookPresentation.bookList);
+            System.out.println(Method.makeColor("Hiển thị danh sách sách theo nhóm thể loại:", ConsoleColors.WHITE_BOLD_BRIGHT));
+            for (int i = 0; i < bookList.size(); i++) {
+                boolean processed = false;
+                for (int j = 0; j < i; j++) {
+                    if (bookList.get(i).getCategoryId() == bookList.get(j).getCategoryId()) {
+                        processed = true;
+                        break;
+                    }
+                }
+
+                if (!processed) {
+                    System.out.printf(Method.makeColor("❤️ Thể loại %s:\n", ConsoleColors.BLUE_BOLD_BRIGHT), getNameCategory(bookList.get(i).getCategoryId(), CategoryPresentation.categoryList));
+//                    System.out.printf("Thể loại %s:\n", getNameCategory(bookList.get(i).getCategoryId(), CategoryPresentation.categoryList));
+                    bookSameCategory(bookList.get(i).getCategoryId(), bookList);
+                }
+            }
         }
     }
 
@@ -176,13 +176,21 @@ public class BookBussinessImp implements IEntity {
         System.out.println(Method.makeColor("Nhập mã thể loại sách của sách:", ConsoleColors.WHITE_BOLD_BRIGHT));
         do {
             boolean isExit = false;
+            boolean isCheck = true;
             int id = Method.validateInteger(scanner);
             for (int i = 0; i < categoryList.size(); i++) {
                 if (id == categoryList.get(i).getId()) {
-                    return id;
+                    if (categoryList.get(i).getStatus()){
+                        return id;
+                    }else {
+                        isCheck = false;
+                        break;
+                    }
                 }
             }
-            if (!isExit) {
+            if (!isCheck){
+                System.err.println("⚠ Warning: Mã thể loại đang không hoạt động! Mời nhập mã khác!");
+            }else if (!isExit) {
                 System.err.println("⚠ Warning: Phải nhập mã thể loại đã có!");
             }
         } while (true);
